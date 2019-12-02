@@ -15,7 +15,7 @@ atom = Atoms("H",
 calc = GPAW(mode = PW(), 
 			xc = "PBE", 
 			hund = True, 
-			eigensolver = 'rmm-diis'  # This solver parallelize over bands
+			eigensolver = 'rmm-diis',  # This solver parallelize over bands
 			occupations = FermiDirac(0.0, fixmagmom = True),
 			txt = 'H.out'
 			)
@@ -37,7 +37,7 @@ calc.set(hund = False) # no hund rule for molecules
 
 molecule.set_calculator(calc)
 e2 = molecule.get_potential_energy()
-calc.write(H2.gpw)
+calc.write("H2.gpw")
 
 
 fd = open('atomization.txt', 'w')
