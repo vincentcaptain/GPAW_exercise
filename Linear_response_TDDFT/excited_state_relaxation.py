@@ -18,4 +18,23 @@ exc = "LDA"			# form of the Vxc in LrTDDFT kernel
 s = Cluster([Atom('Na'), Atom('Na', [0, 0, R])])
 s.minimal_box(box, h = h)
 
-c = GPAW(h = h, nbands = nbands, eigensolver = 'cg', )
+# Create calculator
+c = GPAW(h = h, nbands = nbands, eigensolver = 'cg', 
+		 occupations = FermiDirac(width = width), 
+		 setups = {'Na': '1'}, 
+		 convergence = {'bands': nconv})
+
+c.calculate(s)
+
+lr = LrTDDFT(c, xc = exc, eps = 0.1, jend = nconv - 1)
+
+ex = ExcitedState(lr, iex, d = d)
+s.set_calculator(ex)
+
+ftraj = 'relax_ex' + str(iex)
+ftraj += '_box' + str(box) + '_h' + str(h)
+ftraj += '_d' + str(d) + '.traj'
+traj = io.Trajectory(ftraj, 'w', s)
+dyn = optimize.FIRE(s)
+dyn.attach(traj.write)
+dyn.run(fmax = 0.05)
