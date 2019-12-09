@@ -1,10 +1,15 @@
-from gpaw.tddft import TDDFT
-from gpaw.tddft.ehrenfest import EhrenfestVelocityVerlet
-from gpaw.tddft.laser import CWField
-from ase.units import Hartree, Bohr, AUT
-from ase.io import Trajectory
-from ase.parallel import parprint
+from ase import Atoms
+from gpaw import GPAW
+from ase.build import molecule
 
 name = 'H2O_laser'
 
-# Ehrenfest simulation parameters
+atoms = molecule('H2O')
+
+atoms.set_pbc(False)
+atoms.center(vacuum = 4.0)
+
+calc = GPAW(h = 0.2, nbands = 4, basis = 'dzp', txt = name + '_gs.txt')
+atoms.set_calculator(calc)
+atoms.get_potential_energy()
+calc.write(name + '_gs.gpw', mode = 'all')
