@@ -18,7 +18,7 @@ niter = 500						# up to 500 timesteps = 20 fs
 # -- field freq: w = 0.057 au
 # -- switch on time: 20000 attoseconds = 827 aut
 tdcalc = TDDFT(name + '_gs.gpw', 
-			   txt = name + '_td.txt', 
+			   txt = name + '_td_linear.txt', 
 			   propagator = "EFSICN", 
 			   solver = "BiCGStab", 
 			   td_potential = CWField(0.0169, 0.057, 827))
@@ -28,7 +28,7 @@ ehrenfest = EhrenfestVelocityVerlet(tdcalc)
 
 
 # Another object to save the dynamics
-traj = Trajectory(name + '_td.traj', 'w', tdcalc.get_atoms())
+traj = Trajectory(name + '_td_linear.traj', 'w', tdcalc.get_atoms())
 
 for i in range(1, niter + 1):
 	ehrenfest.propagate(timestep)
