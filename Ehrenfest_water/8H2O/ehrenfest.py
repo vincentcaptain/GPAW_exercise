@@ -10,18 +10,19 @@ name = 'H2O_laser_8'
 # Ehrenfest simulation parameters
 timestep = 40.0					# 40 attoseconds
 ndiv = 10						# dump traj every 10 timesteps
-niter = 500						# up to 500 timesteps = 20 fs
+niter = 2000						# up to 2000 timesteps = 80 fs
 
 # TDDFT calculator with external potential from intense harmonic laser field
 # Laser parameters:
 # -- field intensity: E = sqrt(754*Pd) = 8.68E9 V/m = 0.0169 au
 # -- field freq: w = 0.057 au
 # -- switch on time: 20000 attoseconds = 827 aut
+# -- switch off time: 70000 attoseconds = 
 tdcalc = TDDFT(name + '_gs.gpw', 
 			   txt = name + '_td_linear.txt', 
 			   propagator = "EFSICN", 
 			   solver = "BiCGStab", 
-			   td_potential = CWField(0.0169, 0.057, 827))
+			   td_potential = CWField(0.0169, 0.057, 20000, 70000))
 
 # New object for velocity verlet
 ehrenfest = EhrenfestVelocityVerlet(tdcalc)
